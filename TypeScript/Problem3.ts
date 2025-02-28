@@ -11,7 +11,7 @@ function lengthOfLongestSubstring(s: string): number {
 
   for (let index = 0; index < s.length; index++) {
     if (characterIndexList.has(s[index])) { //si el caracter ya existe en map
-      left = Math.max(left, characterIndexList.get(s[index])+1); //mueve left delante de la posicion repetida
+      left = Math.max(left, characterIndexList.get(s[index])!+1); //mueve left delante de la posicion repetida
     }
 
     characterIndexList.set(s[index], index); //agrega el caracter al map. En caso de ya existir, actualiza su valor
