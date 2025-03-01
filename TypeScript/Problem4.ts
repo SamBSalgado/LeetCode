@@ -9,26 +9,29 @@ Go to LeetCode and look for the problem #10. Read the examples for a better unde
 */
 
 function isMatch(s: string, p: string): boolean {
-  let lastCharacter: string = '';
-  let flag: boolean = true; //indica si el caracter es o no es coincidente
+  const dp: boolean[][] = Array(s.length + 1).fill(null).map(() => Array(p.length + 1).fill(false));  //crea matriz en false
+  dp[0][0] = true; //true porque las cadenas al inicio coinciden al estar vacias
 
-  for (let index = 0; index < s.length; index++) {
-    if (!flag) {
-      return flag; //termina el proceso en false
-    }
-
-    if (p[index] === "." && p[index+1] === "*") { //condicion unica para p = .* debido a que ese patron siempre será correcto
-      return true;
-    }
-      
-    if (p[index] === "." || s[index] === p[index]) { //si el index de p es "." ó ambos inputs coinciden
-      lastCharacter = p[index]; //guarda el index actual de p
-      flag = true; //es valido
-    } else if (p[index] === "*" && lastCharacter === s[index]) { //evalúa si el string actual de "s" coincide con el anterior de p = *
-      flag = true;
-    } else {
-      flag = false;
+  for (let j = 2; j <= p.length; j += 2) { //maneja patrones como "a*" o ".*" al inicio
+    if (p[j - 1] === '*') {
+      dp[0][j] = dp[0][j - 2];
     }
   }
-  return flag;
-};
+
+  //compara cada caracter de la cadena con el patron
+  for (let i = 1; i <= s.length; i++) {
+    for (let j = 1; j <= p.length; j++) {
+      if (p[j - 1] === s[i - 1] || p[j - 1] === '.') { //si coinciden exactamente o es "."
+        dp[i][j] = dp[i - 1][j - 1];
+      } else if (p[j - 1] === '*') { //en caso de encontrar "*"
+        dp[i][j] = dp[i][j - 2]; //opcion 1: no se usa el caracter previo
+
+        if (p[j - 2] === s[i - 1] || p[j - 2] === '.') {
+          dp[i][j] = dp[i][j] || dp[i - 1][j]; //opcion 2: se usa el carácter previo si coincide con el actual de s
+        }
+      }
+    }
+  }
+
+  return dp[s.length][p.length]; //se comparan las cadenas
+}
