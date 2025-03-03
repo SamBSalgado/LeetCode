@@ -16,16 +16,18 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
   let current = 0;
   let previous = 0;
 
-  for (let k = 0; k <= medianIndex; k++) {
-    previous = current;
-    if (i < nums1.length && (j >= nums2.length || nums1[i] < nums2[j])) {
-      current = nums1[i];
-      i++;
+  for (let k = 0; k <= medianIndex; k++) { // itera hasta alcanzar ell índice del elemento medio
+    previous = current; // guarda el valor actual en previous
+    if (i < nums1.length && (j >= nums2.length || nums1[i] < nums2[j])) { // compara los elementos de los arrays y selecciona el menor
+      current = nums1[i]; // asigna el index de nums1 a current
+      i++; // y avanza el index i
     } else {
-      current = nums2[j];
-      j++;
+      current = nums2[j]; // asigna el valor de nums2 a current
+      j++; // y avanza index j
     }
   }
 
-  return isEven ? (previous + current) / 2 : current;
+  return isEven ? (previous + current) / 2 : current; // si isEven resulta true, devuelve la division
+                                                      // entre 2 de la suma de previous y current.
+                                                      // Si isEven es false, devuelve current.
 };
